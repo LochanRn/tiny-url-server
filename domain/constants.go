@@ -14,3 +14,5 @@ type DBType string
 const (
 	LocalStore DBType = "LOCAL_STORE"
 )
+
+const TinyUrlPrefix = "http://127.0.0.1:2112/v1/tinyurl/"

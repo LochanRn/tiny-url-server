@@ -25,7 +25,7 @@ func (t *TinyURLService) CreateTinyURL(url string) (*domain.TinyURL, error) {
 
 	tu := &domain.TinyURL{
 		URL:               u.OriginalURL,
-		TinyURL:           tinyURL,
+		TinyURL:           domain.TinyUrlPrefix + tinyURL,
 		CreationTimeStamp: domain.Time(u.CreatedAt),
 	}
 
@@ -42,6 +42,7 @@ func (t *TinyURLService) GetOriginalURL(tinyURL string) (*domain.TinyURL, error)
 	if err != nil {
 		return nil, errors.Wrapf(err, "error while fetching original url for %s", tinyURL)
 	}
+	url.TinyURL = domain.TinyUrlPrefix + url.TinyURL
 	return converter.ToDomainTinyURL(url), nil
 }
 
