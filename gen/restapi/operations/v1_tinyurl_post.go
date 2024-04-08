@@ -6,9 +6,15 @@ package operations
 // Editing this file might prove futile when you re-run the generate command
 
 import (
+	"context"
 	"net/http"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
+
+	"github.com/LochanRn/tiny-url-api/gen/models"
 )
 
 // V1TinyurlPostHandlerFunc turns a function with the right signature into a v1 tinyurl post handler
@@ -55,4 +61,101 @@ func (o *V1TinyurlPost) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	res := o.Handler.Handle(Params) // actually handle the request
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
+}
+
+// V1TinyurlPostOKBody v1 tinyurl post o k body
+//
+// swagger:model V1TinyurlPostOKBody
+type V1TinyurlPostOKBody struct {
+
+	// creation timestamp
+	// Format: date-time
+	CreationTimestamp models.V1Time `json:"creationTimestamp,omitempty"`
+
+	// tinyurl
+	Tinyurl string `json:"tinyurl,omitempty"`
+
+	// url
+	URL string `json:"url,omitempty"`
+}
+
+// Validate validates this v1 tinyurl post o k body
+func (o *V1TinyurlPostOKBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.validateCreationTimestamp(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *V1TinyurlPostOKBody) validateCreationTimestamp(formats strfmt.Registry) error {
+	if swag.IsZero(o.CreationTimestamp) { // not required
+		return nil
+	}
+
+	if err := o.CreationTimestamp.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("v1TinyurlPostOK" + "." + "creationTimestamp")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("v1TinyurlPostOK" + "." + "creationTimestamp")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this v1 tinyurl post o k body based on the context it is used
+func (o *V1TinyurlPostOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateCreationTimestamp(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *V1TinyurlPostOKBody) contextValidateCreationTimestamp(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(o.CreationTimestamp) { // not required
+		return nil
+	}
+
+	if err := o.CreationTimestamp.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("v1TinyurlPostOK" + "." + "creationTimestamp")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("v1TinyurlPostOK" + "." + "creationTimestamp")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (o *V1TinyurlPostOKBody) MarshalBinary() ([]byte, error) {
+	if o == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(o)
+}
+
+// UnmarshalBinary interface implementation
+func (o *V1TinyurlPostOKBody) UnmarshalBinary(b []byte) error {
+	var res V1TinyurlPostOKBody
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*o = res
+	return nil
 }

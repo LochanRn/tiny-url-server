@@ -1,58 +1,63 @@
 package tinyurl
 
 import (
-	"net/url"
-	"strings"
 	"time"
 
+	"github.com/LochanRn/tiny-url-server/domain"
 	"github.com/LochanRn/tiny-url-server/repo/models"
-	"github.com/LochanRn/tiny-url-server/utils/base62"
+	"github.com/LochanRn/tiny-url-server/services/tinyurl/converter"
+	"github.com/LochanRn/tiny-url-server/utils/random"
+	urlutil "github.com/LochanRn/tiny-url-server/utils/url"
 	"github.com/pkg/errors"
 )
 
-func (t *TinyURLService) CreateTinyURL(url string) (string, error) {
-	tinyURL := base62.Base62Encode(url)
+func (t *TinyURLService) CreateTinyURL(url string) (*domain.TinyURL, error) {
 	u := &models.URL{
 		OriginalURL: url,
-		TinyURL:     tinyURL,
+		TinyURL:     urlutil.GetDomainFromURL(url) + random.RandomNumberInRange(),
 		CreatedAt:   time.Now(),
 	}
 
 	tinyURL, ok, err := t.repo.CreateURL(u)
 	if err != nil {
-		return "", errors.Wrapf(err, "error while creating new tiny url %s", url)
+		return nil, errors.Wrapf(err, "error while creating new tiny url %s", url)
+	}
+
+	tu := &domain.TinyURL{
+		URL:     u.OriginalURL,
+		TinyURL: tinyURL,
+		// CreationTimeStamp: u.CreatedAt,
 	}
 
 	if ok {
-		err = t.incrementDomainCounter(url)
-		if err != nil {
-			return tinyURL, errors.Wrapf(err, "error while incrementing domain counter %s", url)
+		if err := t.IncrementDomainCounter(url); err != nil {
+			return tu, errors.Wrapf(err, "error while incrementing domain counter %s", url)
 		}
 	}
-	return tinyURL, nil
+	return tu, nil
 }
 
-func (t *TinyURLService) GetOriginalURL(tinyURL string) (string, error) {
-	return base62.Base62Decode(tinyURL), nil
-}
-
-func (t *TinyURLService) incrementDomainCounter(url string) error {
-	domain, err := extractDomain(url)
+func (t *TinyURLService) GetOriginalURL(tinyURL string) (*domain.TinyURL, error) {
+	url, err := t.repo.GetURL(tinyURL)
 	if err != nil {
-		return errors.Wrapf(err, "error while extracting domain from %s", url)
+		return nil, errors.Wrapf(err, "error while fetching original url for %s", tinyURL)
 	}
-	err = t.repo.IncrementDomainCounter(domain)
+	return converter.ToDomainTinyURL(url), nil
+}
+
+func (t *TinyURLService) IncrementDomainCounter(url string) error {
+	domain := urlutil.GetDomainFromURL(url)
+	err := t.repo.IncrementDomainCounter(domain)
 	if err != nil {
 		return errors.Wrapf(err, "error while incrementing domain counter %s", url)
 	}
 	return nil
 }
 
-func extractDomain(urlStr string) (string, error) {
-	parsedURL, err := url.Parse(urlStr)
+func (t *TinyURLService) GetDomainsShortened() (domain.CounterList, error) {
+	counters, err := t.repo.GetDomainsShortened()
 	if err != nil {
-		return "", err
+		return nil, errors.Wrap(err, "error while fetching top 3 domain counter")
 	}
-	host := parsedURL.Hostname()
-	return strings.TrimPrefix(host, "www."), nil
+	return converter.ToDomainCounterList(counters), nil
 }

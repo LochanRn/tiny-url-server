@@ -30,11 +30,11 @@ func NewV1TinyurlRedirect(ctx *middleware.Context, handler V1TinyurlRedirectHand
 }
 
 /*
-	V1TinyurlRedirect swagger:route GET /v1/tinyurl tinyurl v1TinyurlRedirect
+	V1TinyurlRedirect swagger:route GET /v1/tinyurl/{tinyurl} tinyurl v1TinyurlRedirect
 
-# URL Shortener
+# Redirect to original URL
 
-URL Shortener
+Redirect to original URL
 */
 type V1TinyurlRedirect struct {
 	Context *middleware.Context

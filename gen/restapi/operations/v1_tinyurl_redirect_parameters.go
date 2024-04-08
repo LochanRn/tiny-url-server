@@ -9,10 +9,8 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/errors"
-	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/validate"
 )
 
 // NewV1TinyurlRedirectParams creates a new V1TinyurlRedirectParams object
@@ -32,9 +30,9 @@ type V1TinyurlRedirectParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*TinyURL to expand
+	/*TinyURL to original URL
 	  Required: true
-	  In: query
+	  In: path
 	*/
 	Tinyurl string
 }
@@ -48,10 +46,8 @@ func (o *V1TinyurlRedirectParams) BindRequest(r *http.Request, route *middleware
 
 	o.HTTPRequest = r
 
-	qs := runtime.Values(r.URL.Query())
-
-	qTinyurl, qhkTinyurl, _ := qs.GetOK("tinyurl")
-	if err := o.bindTinyurl(qTinyurl, qhkTinyurl, route.Formats); err != nil {
+	rTinyurl, rhkTinyurl, _ := route.Params.GetOK("tinyurl")
+	if err := o.bindTinyurl(rTinyurl, rhkTinyurl, route.Formats); err != nil {
 		res = append(res, err)
 	}
 	if len(res) > 0 {
@@ -60,22 +56,15 @@ func (o *V1TinyurlRedirectParams) BindRequest(r *http.Request, route *middleware
 	return nil
 }
 
-// bindTinyurl binds and validates parameter Tinyurl from query.
+// bindTinyurl binds and validates parameter Tinyurl from path.
 func (o *V1TinyurlRedirectParams) bindTinyurl(rawData []string, hasKey bool, formats strfmt.Registry) error {
-	if !hasKey {
-		return errors.Required("tinyurl", "query", rawData)
-	}
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
 
 	// Required: true
-	// AllowEmptyValue: false
-
-	if err := validate.RequiredString("tinyurl", "query", raw); err != nil {
-		return err
-	}
+	// Parameter is provided by construction from the route
 	o.Tinyurl = raw
 
 	return nil

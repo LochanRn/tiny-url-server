@@ -42,6 +42,9 @@ func NewTinyURLServerAPI(spec *loads.Document) *TinyURLServerAPI {
 
 		JSONProducer: runtime.JSONProducer(),
 
+		V1DomainsShorternedHandler: V1DomainsShorternedHandlerFunc(func(params V1DomainsShorternedParams) middleware.Responder {
+			return middleware.NotImplemented("operation V1DomainsShorterned has not yet been implemented")
+		}),
 		V1PingHandler: V1PingHandlerFunc(func(params V1PingParams) middleware.Responder {
 			return middleware.NotImplemented("operation V1Ping has not yet been implemented")
 		}),
@@ -87,6 +90,8 @@ type TinyURLServerAPI struct {
 	//   - application/json
 	JSONProducer runtime.Producer
 
+	// V1DomainsShorternedHandler sets the operation handler for the v1 domains shorterned operation
+	V1DomainsShorternedHandler V1DomainsShorternedHandler
 	// V1PingHandler sets the operation handler for the v1 ping operation
 	V1PingHandler V1PingHandler
 	// V1TinyurlPostHandler sets the operation handler for the v1 tinyurl post operation
@@ -170,6 +175,9 @@ func (o *TinyURLServerAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.V1DomainsShorternedHandler == nil {
+		unregistered = append(unregistered, "V1DomainsShorternedHandler")
+	}
 	if o.V1PingHandler == nil {
 		unregistered = append(unregistered, "V1PingHandler")
 	}
@@ -270,6 +278,10 @@ func (o *TinyURLServerAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/v1/maxdomainsabbrev"] = NewV1DomainsShorterned(o.context, o.V1DomainsShorternedHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/v1/ping"] = NewV1Ping(o.context, o.V1PingHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
@@ -278,7 +290,7 @@ func (o *TinyURLServerAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/v1/tinyurl"] = NewV1TinyurlRedirect(o.context, o.V1TinyurlRedirectHandler)
+	o.handlers["GET"]["/v1/tinyurl/{tinyurl}"] = NewV1TinyurlRedirect(o.context, o.V1TinyurlRedirectHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

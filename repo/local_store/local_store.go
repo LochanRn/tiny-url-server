@@ -28,12 +28,25 @@ func (lc *LocalStore) CreateURL(url *models.URL) (string, bool, error) {
 	if !ok {
 		return "", false, errors.New("urls object not found")
 	}
-	if val, ok := u[url.OriginalURL]; ok {
+	if val, ok := lc.findURL(url.OriginalURL); ok {
 		return val.TinyURL, false, nil
 	}
-	u[url.OriginalURL] = url
+	u[url.TinyURL] = url
 	lc.store[urls] = u
 	return url.TinyURL, true, nil
+}
+
+func (lc *LocalStore) findURL(originalURL string) (*models.URL, bool) {
+	urls, ok := lc.store[urls].(map[string]*models.URL)
+	if !ok {
+		return nil, false
+	}
+	for _, v := range urls {
+		if v.OriginalURL == originalURL {
+			return v, true
+		}
+	}
+	return nil, false
 }
 
 func (lc *LocalStore) GetURL(url string) (*models.URL, error) {
@@ -62,7 +75,7 @@ func (lc *LocalStore) IncrementDomainCounter(domain string) error {
 	return nil
 }
 
-func (lc *LocalStore) GetTop3DomainCount() (models.CounterList, error) {
+func (lc *LocalStore) GetDomainsShortened() (models.CounterList, error) {
 	counter, ok := lc.store[counter].(map[string]*models.Counter)
 	if !ok {
 		return nil, errors.New("counter object not found")

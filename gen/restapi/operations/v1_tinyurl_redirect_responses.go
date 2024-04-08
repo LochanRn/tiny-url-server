@@ -17,16 +17,15 @@ import (
 const V1TinyurlRedirectFoundCode int = 302
 
 /*
-V1TinyurlRedirectFound OK
+V1TinyurlRedirectFound Redirect to the original URL
 
 swagger:response v1TinyurlRedirectFound
 */
 type V1TinyurlRedirectFound struct {
+	/*Original URL
 
-	/*
-	  In: Body
-	*/
-	Payload *models.V1TinyurlRedirectFoundBody `json:"body,omitempty"`
+	 */
+	Location string `json:"Location"`
 }
 
 // NewV1TinyurlRedirectFound creates V1TinyurlRedirectFound with default headers values
@@ -35,27 +34,30 @@ func NewV1TinyurlRedirectFound() *V1TinyurlRedirectFound {
 	return &V1TinyurlRedirectFound{}
 }
 
-// WithPayload adds the payload to the v1 tinyurl redirect found response
-func (o *V1TinyurlRedirectFound) WithPayload(payload *models.V1TinyurlRedirectFoundBody) *V1TinyurlRedirectFound {
-	o.Payload = payload
+// WithLocation adds the location to the v1 tinyurl redirect found response
+func (o *V1TinyurlRedirectFound) WithLocation(location string) *V1TinyurlRedirectFound {
+	o.Location = location
 	return o
 }
 
-// SetPayload sets the payload to the v1 tinyurl redirect found response
-func (o *V1TinyurlRedirectFound) SetPayload(payload *models.V1TinyurlRedirectFoundBody) {
-	o.Payload = payload
+// SetLocation sets the location to the v1 tinyurl redirect found response
+func (o *V1TinyurlRedirectFound) SetLocation(location string) {
+	o.Location = location
 }
 
 // WriteResponse to the client
 func (o *V1TinyurlRedirectFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
-	rw.WriteHeader(302)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
+	// response header Location
+
+	location := o.Location
+	if location != "" {
+		rw.Header().Set("Location", location)
 	}
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(302)
 }
 
 // V1TinyurlRedirectInternalServerErrorCode is the HTTP code returned for type V1TinyurlRedirectInternalServerError
@@ -114,7 +116,7 @@ type V1TinyurlRedirectDefault struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.V1TinyurlRedirectDefaultBody `json:"body,omitempty"`
+	Payload *models.V1DomainsShorternedDefaultBody `json:"body,omitempty"`
 }
 
 // NewV1TinyurlRedirectDefault creates V1TinyurlRedirectDefault with default headers values
@@ -140,13 +142,13 @@ func (o *V1TinyurlRedirectDefault) SetStatusCode(code int) {
 }
 
 // WithPayload adds the payload to the v1 tinyurl redirect default response
-func (o *V1TinyurlRedirectDefault) WithPayload(payload *models.V1TinyurlRedirectDefaultBody) *V1TinyurlRedirectDefault {
+func (o *V1TinyurlRedirectDefault) WithPayload(payload *models.V1DomainsShorternedDefaultBody) *V1TinyurlRedirectDefault {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the v1 tinyurl redirect default response
-func (o *V1TinyurlRedirectDefault) SetPayload(payload *models.V1TinyurlRedirectDefaultBody) {
+func (o *V1TinyurlRedirectDefault) SetPayload(payload *models.V1DomainsShorternedDefaultBody) {
 	o.Payload = payload
 }
 

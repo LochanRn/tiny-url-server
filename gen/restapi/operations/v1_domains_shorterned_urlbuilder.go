@@ -9,22 +9,17 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
-	"strings"
 )
 
-// V1TinyurlRedirectURL generates an URL for the v1 tinyurl redirect operation
-type V1TinyurlRedirectURL struct {
-	Tinyurl string
-
+// V1DomainsShorternedURL generates an URL for the v1 domains shorterned operation
+type V1DomainsShorternedURL struct {
 	_basePath string
-	// avoid unkeyed usage
-	_ struct{}
 }
 
 // WithBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *V1TinyurlRedirectURL) WithBasePath(bp string) *V1TinyurlRedirectURL {
+func (o *V1DomainsShorternedURL) WithBasePath(bp string) *V1DomainsShorternedURL {
 	o.SetBasePath(bp)
 	return o
 }
@@ -32,22 +27,15 @@ func (o *V1TinyurlRedirectURL) WithBasePath(bp string) *V1TinyurlRedirectURL {
 // SetBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *V1TinyurlRedirectURL) SetBasePath(bp string) {
+func (o *V1DomainsShorternedURL) SetBasePath(bp string) {
 	o._basePath = bp
 }
 
 // Build a url path and query string
-func (o *V1TinyurlRedirectURL) Build() (*url.URL, error) {
+func (o *V1DomainsShorternedURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/v1/tinyurl/{tinyurl}"
-
-	tinyurl := o.Tinyurl
-	if tinyurl != "" {
-		_path = strings.Replace(_path, "{tinyurl}", tinyurl, -1)
-	} else {
-		return nil, errors.New("tinyurl is required on V1TinyurlRedirectURL")
-	}
+	var _path = "/v1/maxdomainsabbrev"
 
 	_basePath := o._basePath
 	_result.Path = golangswaggerpaths.Join(_basePath, _path)
@@ -56,7 +44,7 @@ func (o *V1TinyurlRedirectURL) Build() (*url.URL, error) {
 }
 
 // Must is a helper function to panic when the url builder returns an error
-func (o *V1TinyurlRedirectURL) Must(u *url.URL, err error) *url.URL {
+func (o *V1DomainsShorternedURL) Must(u *url.URL, err error) *url.URL {
 	if err != nil {
 		panic(err)
 	}
@@ -67,17 +55,17 @@ func (o *V1TinyurlRedirectURL) Must(u *url.URL, err error) *url.URL {
 }
 
 // String returns the string representation of the path with query string
-func (o *V1TinyurlRedirectURL) String() string {
+func (o *V1DomainsShorternedURL) String() string {
 	return o.Must(o.Build()).String()
 }
 
 // BuildFull builds a full url with scheme, host, path and query string
-func (o *V1TinyurlRedirectURL) BuildFull(scheme, host string) (*url.URL, error) {
+func (o *V1DomainsShorternedURL) BuildFull(scheme, host string) (*url.URL, error) {
 	if scheme == "" {
-		return nil, errors.New("scheme is required for a full url on V1TinyurlRedirectURL")
+		return nil, errors.New("scheme is required for a full url on V1DomainsShorternedURL")
 	}
 	if host == "" {
-		return nil, errors.New("host is required for a full url on V1TinyurlRedirectURL")
+		return nil, errors.New("host is required for a full url on V1DomainsShorternedURL")
 	}
 
 	base, err := o.Build()
@@ -91,6 +79,6 @@ func (o *V1TinyurlRedirectURL) BuildFull(scheme, host string) (*url.URL, error) 
 }
 
 // StringFull returns the string representation of a complete url
-func (o *V1TinyurlRedirectURL) StringFull(scheme, host string) string {
+func (o *V1DomainsShorternedURL) StringFull(scheme, host string) string {
 	return o.Must(o.BuildFull(scheme, host)).String()
 }

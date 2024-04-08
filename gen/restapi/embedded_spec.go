@@ -34,6 +34,36 @@ func init() {
     "version": "1.0.0"
   },
   "paths": {
+    "/v1/maxdomainsabbrev": {
+      "get": {
+        "description": "Domains shortened the most",
+        "tags": [
+          "tinyurl"
+        ],
+        "summary": "Domains shortened the most",
+        "operationId": "V1DomainsShorterned",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/v1DomainsShorterned"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/v1InternalServerError"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/v1DomainsShorternedDefaultBody"
+            }
+          }
+        }
+      }
+    },
     "/v1/ping": {
       "get": {
         "description": "Ping Service",
@@ -59,43 +89,6 @@ func init() {
       }
     },
     "/v1/tinyurl": {
-      "get": {
-        "description": "URL Shortener",
-        "tags": [
-          "tinyurl"
-        ],
-        "summary": "URL Shortener",
-        "operationId": "V1TinyurlRedirect",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "TinyURL to expand",
-            "name": "tinyurl",
-            "in": "query",
-            "required": true
-          }
-        ],
-        "responses": {
-          "302": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/v1TinyurlRedirectFoundBody"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/v1InternalServerError"
-            }
-          },
-          "default": {
-            "description": "generic error response",
-            "schema": {
-              "$ref": "#/definitions/v1TinyurlRedirectDefaultBody"
-            }
-          }
-        }
-      },
       "post": {
         "description": "URL Shortener",
         "consumes": [
@@ -124,7 +117,18 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1TinyurlRedirectFoundBody"
+              "type": "object",
+              "properties": {
+                "creationTimestamp": {
+                  "$ref": "#/definitions/v1Time"
+                },
+                "tinyurl": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              }
             }
           },
           "500": {
@@ -136,7 +140,49 @@ func init() {
           "default": {
             "description": "generic error response",
             "schema": {
-              "$ref": "#/definitions/v1TinyurlRedirectDefaultBody"
+              "$ref": "#/definitions/v1DomainsShorternedDefaultBody"
+            }
+          }
+        }
+      }
+    },
+    "/v1/tinyurl/{tinyurl}": {
+      "get": {
+        "description": "Redirect to original URL",
+        "tags": [
+          "tinyurl"
+        ],
+        "summary": "Redirect to original URL",
+        "operationId": "V1TinyurlRedirect",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "TinyURL to original URL",
+            "name": "tinyurl",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to the original URL",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "Original URL"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/v1InternalServerError"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/v1DomainsShorternedDefaultBody"
             }
           }
         }
@@ -146,6 +192,37 @@ func init() {
   "definitions": {
     "v1ApiError": {
       "type": "string"
+    },
+    "v1Domains": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "domains": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DomainsShorterned": {
+      "type": "object",
+      "properties": {
+        "domains": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Domains"
+          }
+        }
+      }
+    },
+    "v1DomainsShorternedDefaultBody": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      },
+      "x-go-gen-location": "operations"
     },
     "v1InternalServerError": {
       "type": "object",
@@ -174,30 +251,6 @@ func init() {
           "type": "string"
         }
       }
-    },
-    "v1TinyurlRedirectDefaultBody": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string"
-        }
-      },
-      "x-go-gen-location": "operations"
-    },
-    "v1TinyurlRedirectFoundBody": {
-      "type": "object",
-      "properties": {
-        "creationTimestamp": {
-          "$ref": "#/definitions/v1Time"
-        },
-        "tinyurl": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string"
-        }
-      },
-      "x-go-gen-location": "operations"
     }
   }
 }`))
@@ -218,6 +271,36 @@ func init() {
     "version": "1.0.0"
   },
   "paths": {
+    "/v1/maxdomainsabbrev": {
+      "get": {
+        "description": "Domains shortened the most",
+        "tags": [
+          "tinyurl"
+        ],
+        "summary": "Domains shortened the most",
+        "operationId": "V1DomainsShorterned",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/v1DomainsShorterned"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/v1InternalServerError"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/v1DomainsShorternedDefaultBody"
+            }
+          }
+        }
+      }
+    },
     "/v1/ping": {
       "get": {
         "description": "Ping Service",
@@ -243,43 +326,6 @@ func init() {
       }
     },
     "/v1/tinyurl": {
-      "get": {
-        "description": "URL Shortener",
-        "tags": [
-          "tinyurl"
-        ],
-        "summary": "URL Shortener",
-        "operationId": "V1TinyurlRedirect",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "TinyURL to expand",
-            "name": "tinyurl",
-            "in": "query",
-            "required": true
-          }
-        ],
-        "responses": {
-          "302": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/v1TinyurlRedirectFoundBody"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/v1InternalServerError"
-            }
-          },
-          "default": {
-            "description": "generic error response",
-            "schema": {
-              "$ref": "#/definitions/v1TinyurlRedirectDefaultBody"
-            }
-          }
-        }
-      },
       "post": {
         "description": "URL Shortener",
         "consumes": [
@@ -308,7 +354,18 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/v1TinyurlRedirectFoundBody"
+              "type": "object",
+              "properties": {
+                "creationTimestamp": {
+                  "$ref": "#/definitions/v1Time"
+                },
+                "tinyurl": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              }
             }
           },
           "500": {
@@ -320,7 +377,49 @@ func init() {
           "default": {
             "description": "generic error response",
             "schema": {
-              "$ref": "#/definitions/v1TinyurlRedirectDefaultBody"
+              "$ref": "#/definitions/v1DomainsShorternedDefaultBody"
+            }
+          }
+        }
+      }
+    },
+    "/v1/tinyurl/{tinyurl}": {
+      "get": {
+        "description": "Redirect to original URL",
+        "tags": [
+          "tinyurl"
+        ],
+        "summary": "Redirect to original URL",
+        "operationId": "V1TinyurlRedirect",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "TinyURL to original URL",
+            "name": "tinyurl",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to the original URL",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "Original URL"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/v1InternalServerError"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/v1DomainsShorternedDefaultBody"
             }
           }
         }
@@ -330,6 +429,37 @@ func init() {
   "definitions": {
     "v1ApiError": {
       "type": "string"
+    },
+    "v1Domains": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "domains": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DomainsShorterned": {
+      "type": "object",
+      "properties": {
+        "domains": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Domains"
+          }
+        }
+      }
+    },
+    "v1DomainsShorternedDefaultBody": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      },
+      "x-go-gen-location": "operations"
     },
     "v1InternalServerError": {
       "type": "object",
@@ -358,30 +488,6 @@ func init() {
           "type": "string"
         }
       }
-    },
-    "v1TinyurlRedirectDefaultBody": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string"
-        }
-      },
-      "x-go-gen-location": "operations"
-    },
-    "v1TinyurlRedirectFoundBody": {
-      "type": "object",
-      "properties": {
-        "creationTimestamp": {
-          "$ref": "#/definitions/v1Time"
-        },
-        "tinyurl": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string"
-        }
-      },
-      "x-go-gen-location": "operations"
     }
   }
 }`))

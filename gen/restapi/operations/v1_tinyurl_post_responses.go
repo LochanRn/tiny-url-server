@@ -26,7 +26,7 @@ type V1TinyurlPostOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.V1TinyurlRedirectFoundBody `json:"body,omitempty"`
+	Payload *V1TinyurlPostOKBody `json:"body,omitempty"`
 }
 
 // NewV1TinyurlPostOK creates V1TinyurlPostOK with default headers values
@@ -36,13 +36,13 @@ func NewV1TinyurlPostOK() *V1TinyurlPostOK {
 }
 
 // WithPayload adds the payload to the v1 tinyurl post o k response
-func (o *V1TinyurlPostOK) WithPayload(payload *models.V1TinyurlRedirectFoundBody) *V1TinyurlPostOK {
+func (o *V1TinyurlPostOK) WithPayload(payload *V1TinyurlPostOKBody) *V1TinyurlPostOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the v1 tinyurl post o k response
-func (o *V1TinyurlPostOK) SetPayload(payload *models.V1TinyurlRedirectFoundBody) {
+func (o *V1TinyurlPostOK) SetPayload(payload *V1TinyurlPostOKBody) {
 	o.Payload = payload
 }
 
@@ -114,7 +114,7 @@ type V1TinyurlPostDefault struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.V1TinyurlRedirectDefaultBody `json:"body,omitempty"`
+	Payload *models.V1DomainsShorternedDefaultBody `json:"body,omitempty"`
 }
 
 // NewV1TinyurlPostDefault creates V1TinyurlPostDefault with default headers values
@@ -140,13 +140,13 @@ func (o *V1TinyurlPostDefault) SetStatusCode(code int) {
 }
 
 // WithPayload adds the payload to the v1 tinyurl post default response
-func (o *V1TinyurlPostDefault) WithPayload(payload *models.V1TinyurlRedirectDefaultBody) *V1TinyurlPostDefault {
+func (o *V1TinyurlPostDefault) WithPayload(payload *models.V1DomainsShorternedDefaultBody) *V1TinyurlPostDefault {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the v1 tinyurl post default response
-func (o *V1TinyurlPostDefault) SetPayload(payload *models.V1TinyurlRedirectDefaultBody) {
+func (o *V1TinyurlPostDefault) SetPayload(payload *models.V1DomainsShorternedDefaultBody) {
 	o.Payload = payload
 }
 

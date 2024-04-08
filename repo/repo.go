@@ -13,7 +13,7 @@ type Repo interface {
 	CreateURL(url *models.URL) (string, bool, error)
 	GetURL(url string) (*models.URL, error)
 	IncrementDomainCounter(domain string) error
-	GetTop3DomainCount() (models.CounterList, error)
+	GetDomainsShortened() (models.CounterList, error)
 }
 
 func NewRepo(dbType domain.DBType) (Repo, error) {
