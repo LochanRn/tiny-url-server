@@ -22,7 +22,7 @@ func NewV1Handler(dbType domain.DBType) (*V1Handler, error) {
 }
 
 func ConfigureV1Handlers(api *v1.TinyURLServerAPI) (*v1.TinyURLServerAPI, error) {
-	h, err := NewV1Handler(domain.LocalStore)
+	h, err := NewV1Handler(domain.LocalStore) // dbType should be obtained from the config file instead of hardcoding it.
 	if err != nil {
 		return nil, errors.Wrap(err, "error while creating new handler")
 	}
