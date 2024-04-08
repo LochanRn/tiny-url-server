@@ -71,7 +71,7 @@ docker-rmi: ## Remove the local docker image
 	docker rmi  ${LOCAL_SERVER_IMG}
 
 build:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o bin/localmgmt cmd/main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o bin/tiny-url-server cmd/main.go
 
 run: 
 	go run cmd/main.go
