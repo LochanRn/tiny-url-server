@@ -15,9 +15,9 @@ func (v *V1Handler) CreateTinyURL(params v1.V1TinyurlPostParams) middleware.Resp
 		})
 	}
 	return v1.NewV1TinyurlPostOK().WithPayload(&v1.V1TinyurlPostOKBody{
-		Tinyurl: tinyURL.TinyURL,
-		URL:     tinyURL.URL,
-		// CreationTimestamp: tinyURL.CreationTimeStamp,
+		Tinyurl:           tinyURL.TinyURL,
+		URL:               tinyURL.URL,
+		CreationTimestamp: models.V1Time(tinyURL.CreationTimeStamp),
 	})
 }
 

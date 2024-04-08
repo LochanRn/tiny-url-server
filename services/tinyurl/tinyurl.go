@@ -14,7 +14,7 @@ import (
 func (t *TinyURLService) CreateTinyURL(url string) (*domain.TinyURL, error) {
 	u := &models.URL{
 		OriginalURL: url,
-		TinyURL:     urlutil.GetDomainFromURL(url) + random.RandomNumberInRange(),
+		TinyURL:     random.RandomNumberInRange(),
 		CreatedAt:   time.Now(),
 	}
 
@@ -24,9 +24,9 @@ func (t *TinyURLService) CreateTinyURL(url string) (*domain.TinyURL, error) {
 	}
 
 	tu := &domain.TinyURL{
-		URL:     u.OriginalURL,
-		TinyURL: tinyURL,
-		// CreationTimeStamp: u.CreatedAt,
+		URL:               u.OriginalURL,
+		TinyURL:           tinyURL,
+		CreationTimeStamp: domain.Time(u.CreatedAt),
 	}
 
 	if ok {
