@@ -73,6 +73,9 @@ docker-rmi: ## Remove the local docker image
 build:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o bin/localmgmt cmd/main.go
 
+run: 
+	go run cmd/main.go
+
 test:
 	mkdir -p $(COVER_DIR)
 	go test -coverpkg=${COVERAGE_PACKAGES} -coverprofile $(COVER_DIR)/coverage.out -covermode=atomic ./...

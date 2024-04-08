@@ -3,7 +3,7 @@ module github.com/LochanRn/tiny-url-server
 go 1.21.1
 
 require (
-	github.com/LochanRn/tiny-url-api v1.0.0
+	github.com/LochanRn/tiny-url-api v0.0.0-20240408081513-fd8718db6752
 	github.com/go-errors/errors v1.5.1
 	github.com/go-openapi/errors v0.22.0
 	github.com/go-openapi/loads v0.22.0
@@ -38,4 +38,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/LochanRn/tiny-url-api => ../tiny-url-api
+// replace github.com/LochanRn/tiny-url-api => ../tiny-url-api

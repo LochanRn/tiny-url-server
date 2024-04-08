@@ -1,3 +1,5 @@
+github.com/LochanRn/tiny-url-api v0.0.0-20240408081513-fd8718db6752 h1:kmkdPkNR5pQk1taoTW/fuh1ktt50WZH8a+bBjQvY94o=
+github.com/LochanRn/tiny-url-api v0.0.0-20240408081513-fd8718db6752/go.mod h1:M0zQEcKnZmha/UGjrWU3KHwA9L+fh1vPTKyBpSnV804=
 github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 h1:DklsrG3dyBCFEj5IhUbnKptjxatkF07cF2ak3yi77so=
 github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2/go.mod h1:WaHUgvxTVq04UNunO+XhnAqY/wQc+bxr74GqbsZ/Jqw=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
