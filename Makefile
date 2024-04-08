@@ -63,7 +63,7 @@ swagger-clean:
 
 docker:
 	@echo "Generating the docker build for tiny-url-server server"
-	@docker build . -t ${LOCAL_SERVER_IMG} -f build/docker/Dockerfile
+	@docker build . -t ${LOCAL_SERVER_IMG} -f build/Dockerfile
 	@echo "Generated the docker image for tiny-url-server server"
 	docker push ${LOCAL_SERVER_IMG}
 
