@@ -1,8 +1,11 @@
 # tiny-url-server
 URL shortner service 
 
-You can start the server using the command 
+
+###### You can start the server using the command 
+```BASH
 go run cmd/main.go
+```
 
 #### CREATE API: 
 
